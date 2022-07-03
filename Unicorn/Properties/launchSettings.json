@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "Unicorn (Package)": {
+      "commandName": "MsixPackage",
+      "nativeDebugging": false
+    },
+    "Unicorn (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

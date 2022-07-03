@@ -1,0 +1,63 @@
+﻿<Page
+    x:Class="Arconia.Views.RconPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Arconia.Views"
+    xmlns:rcon="using:Arconia.Rcon"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Padding="12 44 16 16" VerticalAlignment="Stretch">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="48"/>
+        </Grid.RowDefinitions>
+        
+        <CommandBar Grid.Row="0" HorizontalAlignment="Left" Background="Transparent" IsOpen="False" OverflowButtonVisibility="Collapsed" DefaultLabelPosition="Right" VerticalContentAlignment="Stretch">
+            <CommandBar.Content>
+                <StackPanel Orientation="Horizontal" Spacing="16" Margin="0 0 12 0">
+                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE148;" FontSize="40" VerticalAlignment="Center"/>
+                    <TextBlock Style="{ ThemeResource TitleTextBlockStyle }" VerticalAlignment="Center">
+                        <Run FontWeight="SemiBold" Text="localhost"/><Run FontWeight="SemiLight" Text=":"/><Run FontWeight="SemiLight" Text="25575" />
+                    </TextBlock>
+                </StackPanel>
+            </CommandBar.Content>
+            <AppBarSeparator/>
+            <AppBarButton VerticalAlignment="Center" Label="Disconnect" Icon="Placeholder" Click="AppBarButton_Click"/>
+        </CommandBar>
+
+        <ScrollViewer Grid.Row="1">
+            <ItemsRepeater ItemsSource="{x:Bind data}">
+                <DataTemplate x:DataType="rcon:RconPacket">
+                    <Grid Background="{ThemeResource LayerFillColorDefaultBrush}" CornerRadius="4" Margin="4">
+                        <TextBlock Text="{x:Bind Payload}" FontFamily="Cascadia Code" TextWrapping="Wrap" IsTextSelectionEnabled="True" Padding="8" VerticalAlignment="Center"/>
+                        <!--<Button HorizontalAlignment="Right" VerticalAlignment="Top" Margin="8">
+                            <SymbolIcon Symbol="Copy"/>
+                        </Button>-->
+                    </Grid>
+                </DataTemplate>
+            </ItemsRepeater>
+        </ScrollViewer>
+
+        <Grid Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" ColumnSpacing="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="84"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBox x:Name="commandBox" Grid.Column="0" HorizontalAlignment="Stretch" PlaceholderText="Enter Command" TextAlignment="Left" VerticalContentAlignment="Center"/>
+            <Button Grid.Column="1" Style="{ ThemeResource AccentButtonStyle }" HorizontalAlignment="Right" Width="84" Click="Button_Click">
+                <Button.KeyboardAccelerators>
+                    <KeyboardAccelerator Key="Enter" ScopeOwner="{x:Bind commandBox}"/>
+                </Button.KeyboardAccelerators>
+                <StackPanel Orientation="Horizontal" Spacing="4">
+                    <SymbolIcon Symbol="Send"/>
+                    <TextBlock Text="Send"/>
+                </StackPanel>
+            </Button>
+        </Grid>
+
+    </Grid>
+</Page>
