@@ -1,10 +1,10 @@
 {
   "profiles": {
-    "Unicorn (Package)": {
+    "Arconia (Package)": {
       "commandName": "MsixPackage",
       "nativeDebugging": false
     },
-    "Unicorn (Unpackaged)": {
+    "Arconia (Unpackaged)": {
       "commandName": "Project"
     }
   }
