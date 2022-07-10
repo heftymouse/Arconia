@@ -17,7 +17,8 @@ namespace Arconia.Views
     /// </summary>
     public sealed partial class RconPage : Page
     {
-        string hostString;
+        string hostname;
+        string port;
         RconSession session;
         CancellationTokenSource source;
         CancellationToken packetLoopToken;
@@ -34,8 +35,19 @@ namespace Arconia.Views
         {
             RconArgs args = (RconArgs)navArgs.Parameter;
             session = new();
-            hostString = $"{args.hostname}:{args.port}";
-            await session.Connect(args.hostname, args.port, args.password);
+            hostname = args.hostname;
+            port = args.port.ToString();
+            try
+            {
+                await session.Connect(args.hostname, args.port, args.password);
+            }
+            catch (RconAuthException)
+            {
+                // this is a horrible solution but i just want to stop it from crashing
+                // will fix properly (error message when connecting) eventually
+                session.Dispose();
+                this.Frame.Navigate(typeof(ConnectPage));
+            }
 
             packetLoopTask = DoPacketLoop();
             base.OnNavigatedTo(navArgs);
@@ -51,7 +63,7 @@ namespace Arconia.Views
             {
                 await session.GetNextPacketAsync(packetLoopToken);
             }
-            catch (TaskCanceledException e)
+            catch (TaskCanceledException)
             {
 
             }

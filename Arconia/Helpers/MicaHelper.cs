@@ -34,6 +34,7 @@ namespace Arconia.Helpers
                 SetConfigurationSourceTheme();
 
                 m_micaController = new Microsoft.UI.Composition.SystemBackdrops.MicaController();
+                //m_micaController.Kind = Microsoft.UI.Composition.SystemBackdrops.MicaKind.BaseAlt;
 
                 // Enable the system backdrop.
                 // Note: Be sure to have "using WinRT;" to support the Window.As<...>() call.
@@ -73,12 +74,13 @@ namespace Arconia.Helpers
 
         private void SetConfigurationSourceTheme()
         {
-            switch (((FrameworkElement)window.Content).ActualTheme)
+            m_configurationSource.Theme = ((FrameworkElement)window.Content).ActualTheme switch
             {
-                case ElementTheme.Dark: m_configurationSource.Theme = Microsoft.UI.Composition.SystemBackdrops.SystemBackdropTheme.Dark; break;
-                case ElementTheme.Light: m_configurationSource.Theme = Microsoft.UI.Composition.SystemBackdrops.SystemBackdropTheme.Light; break;
-                case ElementTheme.Default: m_configurationSource.Theme = Microsoft.UI.Composition.SystemBackdrops.SystemBackdropTheme.Default; break;
-            }
+                ElementTheme.Dark => Microsoft.UI.Composition.SystemBackdrops.SystemBackdropTheme.Dark,
+                ElementTheme.Light => Microsoft.UI.Composition.SystemBackdrops.SystemBackdropTheme.Light,
+                ElementTheme.Default => Microsoft.UI.Composition.SystemBackdrops.SystemBackdropTheme.Default,
+                _ => Microsoft.UI.Composition.SystemBackdrops.SystemBackdropTheme.Default,
+            };
         }
     }
 }
