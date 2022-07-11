@@ -10,16 +10,16 @@
 
     <Grid Padding="12 44 16 16" VerticalAlignment="Stretch">
         <Grid.RowDefinitions>
-            <RowDefinition Height="60"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="48"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <CommandBar Grid.Row="0" HorizontalAlignment="Left" Background="Transparent" IsOpen="False" OverflowButtonVisibility="Collapsed" DefaultLabelPosition="Right" VerticalContentAlignment="Stretch">
             <CommandBar.Content>
-                <StackPanel Orientation="Horizontal" Spacing="16" Margin="0 0 12 0">
-                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE148;" FontSize="40" VerticalAlignment="Center"/>
-                    <TextBlock Style="{ThemeResource TitleTextBlockStyle}" VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal" Spacing="16" Margin="0 0 12 0" VerticalAlignment="Stretch">
+                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE148;" FontSize="40" VerticalAlignment="Stretch"/>
+                    <TextBlock Style="{ThemeResource TitleTextBlockStyle}" VerticalAlignment="Center" Margin="0 0 0 2.5">
                         <Run FontWeight="SemiBold" Text="{x:Bind hostname}"/><Run FontWeight="SemiLight" Text=":"/><Run FontWeight="SemiLight" Text="{x:Bind port}" />
                     </TextBlock>
                 </StackPanel>
@@ -28,7 +28,8 @@
             <AppBarButton VerticalAlignment="Center" Label="Disconnect" Icon="Placeholder" Click="AppBarButton_Click"/>
         </CommandBar>
 
-        <ListView Grid.Row="1" ItemsSource="{x:Bind data}">
+        <ListView Grid.Row="1" ItemsSource="{x:Bind data}" SelectionMode="None">
+
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="rcon:RconPacket">
                     <Grid Background="{ThemeResource LayerFillColorDefaultBrush}" CornerRadius="4" Margin="4">
@@ -41,8 +42,7 @@
             </ListView.ItemTemplate>
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <ItemsStackPanel VerticalAlignment="Top"
-                            ItemsUpdatingScrollMode="KeepLastItemInView"/>
+                    <ItemsStackPanel VerticalAlignment="Top" ItemsUpdatingScrollMode="KeepLastItemInView"/>
                 </ItemsPanelTemplate>
             </ListView.ItemsPanel>
         </ListView>

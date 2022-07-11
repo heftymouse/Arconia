@@ -73,7 +73,7 @@ namespace Arconia.Rcon
                     return new(
                             BinaryPrimitives.ReadInt32LittleEndian(buffer.Slice(0, 4)),
                             RconPacketType.Response,
-                            System.Text.Encoding.ASCII.GetString(buffer[8..^2])
+                            System.Text.Encoding.Latin1.GetString(buffer[8..^2])
                         );
                 }
 

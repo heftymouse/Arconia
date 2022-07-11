@@ -28,7 +28,7 @@ namespace Arconia.Rcon
 
         public int Length()
         {
-            return 12 + System.Text.Encoding.ASCII.GetByteCount(Payload) + 2;
+            return 12 + System.Text.Encoding.Latin1.GetByteCount(Payload) + 2;
         }
 
         public byte[] GetBytes()
