@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using System.Buffers.Binary;
 
 namespace Arconia.Rcon

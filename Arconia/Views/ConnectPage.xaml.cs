@@ -11,6 +11,7 @@ namespace Arconia.Views
         string connectHost = "localhost";
         int connectPort = 25575;
         string connectPassword;
+
         public ConnectPage()
         {
             this.InitializeComponent();

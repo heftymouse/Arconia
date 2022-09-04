@@ -9,10 +9,10 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Grid x:Name="AppTitleBar" Grid.Row="0" HorizontalAlignment="Stretch" Padding="12" VerticalAlignment="Top" Background="Transparent" Height="40">
+        <Grid x:Name="AppTitleBar" Grid.Row="0" HorizontalAlignment="Stretch" Margin="8 2 0 0" VerticalAlignment="Top" Background="Transparent" Height="32">
             <StackPanel Orientation="Horizontal" Spacing="12" HorizontalAlignment="Left">
                 <Image Source="Assets/Square44x44Logo.scale-200.png" Width="16" Height="16" Margin="0 0 0 0" VerticalAlignment="Center"/>
                 <TextBlock x:Name="AppTitleTextBlock" Text="{x:Bind AppTitle, Mode=OneWay}" Style="{ StaticResource CaptionTextBlockStyle }" VerticalAlignment="Center"/>

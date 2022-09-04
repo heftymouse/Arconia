@@ -1,7 +1,10 @@
 ﻿using System;
+using Microsoft.UI;
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml.Media;
 using Windows.UI.ViewManagement;
+using WinRT.Interop;
 
 using Arconia.Views;
 using Arconia.Helpers;
@@ -29,13 +32,12 @@ namespace Arconia
         {
             this.InitializeComponent();
 
-            AppTitle = new Random().Next(1000000) != 0 ? "Arconia" : "Hraður Viðskiptavinur";
-            ExtendsContentIntoTitleBar = true;
-            SetTitleBar(AppTitleBar);
+            AppTitle = "Arconia";
+            SetCustomTitlebar();
             MicaHelper helper = new(this);
             helper.TrySetMicaBackdrop();
 
-            RootFrame.Navigate(typeof(ConnectPage));
+            RootFrame.Navigate(typeof(SettingsPage));
 
             Activated += (sender, e) =>
             {
@@ -51,6 +53,22 @@ namespace Arconia
                         new SolidColorBrush(settings.GetColorValue(UIColorType.Foreground));
                 }
             };
+        }
+
+        void SetCustomTitlebar()
+        {
+            if (!AppWindowTitleBar.IsCustomizationSupported()) return;
+
+            IntPtr hWnd = WindowNative.GetWindowHandle(this);
+            WindowId wndId = Win32Interop.GetWindowIdFromWindow(hWnd);
+            var appWindow = AppWindow.GetFromWindowId(wndId);
+
+            var titlebar = appWindow.TitleBar;
+            titlebar.ExtendsContentIntoTitleBar = true;
+            titlebar.ButtonBackgroundColor = Colors.Transparent;
+            titlebar.ButtonInactiveBackgroundColor = Colors.Transparent;
+            titlebar.ButtonHoverBackgroundColor = ((Microsoft.UI.Xaml.Media.SolidColorBrush)App.Current.Resources.ThemeDictionaries["SystemControlBackgroundListLowBrush"]).Color;
+            titlebar.ButtonPressedBackgroundColor = ((Microsoft.UI.Xaml.Media.SolidColorBrush)App.Current.Resources.ThemeDictionaries["SystemControlBackgroundListMediumBrush"]).Color;
         }
     }
 }

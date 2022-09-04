@@ -13,9 +13,6 @@ namespace Arconia.Rcon
     internal class RconSession : IDisposable
     {
         StreamSocket rconSocket;
-
-        string ServerIP;
-        int Port;
         private bool disposedValue;
 
         public event EventHandler<RconPacket> PacketReceived;
@@ -42,9 +39,6 @@ namespace Arconia.Rcon
             {
                 throw new RconAuthException();
             }
-            
-            ServerIP = ip;
-            Port = port; 
         }
 
         public async Task SendPacketAsync(int id, string payload)

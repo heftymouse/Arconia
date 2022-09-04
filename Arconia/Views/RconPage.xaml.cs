@@ -29,6 +29,7 @@ namespace Arconia.Views
         public RconPage()
         {
             this.InitializeComponent();
+            NavigationCacheMode = NavigationCacheMode.Required;
         }
 
         async protected override void OnNavigatedTo(NavigationEventArgs navArgs)

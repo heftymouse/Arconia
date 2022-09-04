@@ -8,8 +8,8 @@
     mc:Ignorable="d">
 
     <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="12">
-        <TextBlock Text="Connect to a server" Style="{ ThemeResource TitleLargeTextBlockStyle }" HorizontalAlignment="Center" FontWeight="SemiBold" Margin="0 0 0 8"/>
-        <Grid ColumnSpacing="12" RowSpacing="12" Width="360">
+        <TextBlock Text="Connect to a server" Style="{ ThemeResource TitleLargeTextBlockStyle }" HorizontalAlignment="Center" FontWeight="SemiBold" Margin="0 0 0 0"/>
+        <Grid ColumnSpacing="8" RowSpacing="8" Width="352">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="100"/>
