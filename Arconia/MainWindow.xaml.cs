@@ -30,14 +30,14 @@ namespace Arconia
         }
         public MainWindow()
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
-            AppTitle = "Arconia";
+            AppTitle = "Thing";
             SetCustomTitlebar();
             MicaHelper helper = new(this);
             helper.TrySetMicaBackdrop();
 
-            RootFrame.Navigate(typeof(SettingsPage));
+            RootFrame.Navigate(typeof(ConnectPage));
 
             Activated += (sender, e) =>
             {
@@ -57,18 +57,24 @@ namespace Arconia
 
         void SetCustomTitlebar()
         {
-            if (!AppWindowTitleBar.IsCustomizationSupported()) return;
+            if (AppWindowTitleBar.IsCustomizationSupported())
+            {
+                IntPtr hWnd = WindowNative.GetWindowHandle(this);
+                WindowId wndId = Win32Interop.GetWindowIdFromWindow(hWnd);
+                var appWindow = AppWindow.GetFromWindowId(wndId);
 
-            IntPtr hWnd = WindowNative.GetWindowHandle(this);
-            WindowId wndId = Win32Interop.GetWindowIdFromWindow(hWnd);
-            var appWindow = AppWindow.GetFromWindowId(wndId);
-
-            var titlebar = appWindow.TitleBar;
-            titlebar.ExtendsContentIntoTitleBar = true;
-            titlebar.ButtonBackgroundColor = Colors.Transparent;
-            titlebar.ButtonInactiveBackgroundColor = Colors.Transparent;
-            titlebar.ButtonHoverBackgroundColor = ((Microsoft.UI.Xaml.Media.SolidColorBrush)App.Current.Resources.ThemeDictionaries["SystemControlBackgroundListLowBrush"]).Color;
-            titlebar.ButtonPressedBackgroundColor = ((Microsoft.UI.Xaml.Media.SolidColorBrush)App.Current.Resources.ThemeDictionaries["SystemControlBackgroundListMediumBrush"]).Color;
+                var titlebar = appWindow.TitleBar;
+                titlebar.ExtendsContentIntoTitleBar = true;
+                titlebar.ButtonBackgroundColor = Colors.Transparent;
+                titlebar.ButtonInactiveBackgroundColor = Colors.Transparent;
+                titlebar.ButtonHoverBackgroundColor = ((Microsoft.UI.Xaml.Media.SolidColorBrush)App.Current.Resources.ThemeDictionaries["SystemControlBackgroundListLowBrush"]).Color;
+                titlebar.ButtonPressedBackgroundColor = ((Microsoft.UI.Xaml.Media.SolidColorBrush)App.Current.Resources.ThemeDictionaries["SystemControlBackgroundListMediumBrush"]).Color;
+            }
+            else
+            {
+                ExtendsContentIntoTitleBar = true;
+                SetTitleBar(AppTitleBar);
+            }     
         }
     }
 }
