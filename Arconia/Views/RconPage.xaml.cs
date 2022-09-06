@@ -5,7 +5,9 @@ using System.Collections.ObjectModel;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
-using Arconia.Rcon;
+using Arconia.Core.Rcon;
+using Arconia.Core.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -17,14 +19,7 @@ namespace Arconia.Views
     /// </summary>
     public sealed partial class RconPage : Page
     {
-        string hostname;
-        string port;
-        RconSession session;
-        CancellationTokenSource source;
-        CancellationToken packetLoopToken;
-        Task packetLoopTask;
-
-        ObservableCollection<RconPacket> data = new();
+        RconViewModel vm;
 
         public RconPage()
         {
@@ -32,67 +27,10 @@ namespace Arconia.Views
             NavigationCacheMode = NavigationCacheMode.Required;
         }
 
-        async protected override void OnNavigatedTo(NavigationEventArgs navArgs)
+        protected override void OnNavigatedTo(NavigationEventArgs navArgs)
         {
             RconArgs args = (RconArgs)navArgs.Parameter;
-            session = new();
-            hostname = args.hostname;
-            port = args.port.ToString();
-            try
-            {
-                await session.Connect(args.hostname, args.port, args.password);
-            }
-            catch (RconAuthException)
-            {
-                // this is a horrible solution but i just want to stop it from crashing
-                // will fix properly (error message when connecting) eventually
-                session.Dispose();
-                this.Frame.Navigate(typeof(ConnectPage));
-            }
-
-            packetLoopTask = DoPacketLoop();
-            base.OnNavigatedTo(navArgs);
-        }
-
-        private async Task DoPacketLoop()
-        {
-            session.PacketReceived += OnPacketReceived;
-            source = new();
-            packetLoopToken = source.Token;
-
-            try
-            {
-                await session.GetNextPacketAsync(packetLoopToken);
-            }
-            catch (TaskCanceledException)
-            {
-
-            }
-            finally
-            {
-                source.Dispose();
-                session.Dispose();
-            }
-        }
-
-        private void OnPacketReceived(object sender, RconPacket args)
-        {
-            data.Add(args);
-        }
-
-        private async void AppBarButton_Click(object sender, RoutedEventArgs e)
-        {
-            source.Cancel();
-            await packetLoopTask;
-            Frame.Navigate(typeof(ConnectPage));
-        }
-
-        private async void Button_Click(object sender, RoutedEventArgs e)
-        {
-            if (commandBox.Text == null) return;
-
-            await session.SendPacketAsync(new Random().Next(255), commandBox.Text);
-            commandBox.Text = null;
+            vm = new RconViewModel(App.Services.GetService<IRconProvider>(), args.hostname, args.port, args.password);
         }
     }
 

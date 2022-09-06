@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Arconia.Rcon
+namespace Arconia.Core.Rcon
 {
-    class RconAuthException : RconException { }
+    public class RconException : Exception { }
 }

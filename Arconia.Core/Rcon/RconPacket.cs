@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Buffers.Binary;
+using System.Text;
 
-namespace Arconia.Rcon
+namespace Arconia.Core.Rcon
 {
     public enum RconPacketType
     {
         Login = 3,
         Command = 2,
-        Response = 0
+        Response = 0,
+        Unknown = -1
     }
 
     public readonly record struct RconPacket
@@ -25,19 +27,22 @@ namespace Arconia.Rcon
             Payload = payload;
         }
 
-        public int Length()
+        public int Length
         {
-            return 12 + System.Text.Encoding.Latin1.GetByteCount(Payload) + 2;
+            get
+            {
+                return 12 + Encoding.Latin1.GetByteCount(Payload) + 2;
+            }
         }
 
         public byte[] GetBytes()
         {
-            byte[] array = new byte[Length()];
+            byte[] array = new byte[Length];
             Span<byte> packet = array;
-            BinaryPrimitives.WriteInt32LittleEndian(packet, Length() - 4);
+            BinaryPrimitives.WriteInt32LittleEndian(packet, Length - 4);
             BinaryPrimitives.WriteInt32LittleEndian(packet.Slice(4, 4), Id);
             BinaryPrimitives.WriteInt32LittleEndian(packet.Slice(8, 4), (int)Type);
-            System.Text.Encoding.Latin1.GetBytes(Payload).AsSpan().CopyTo(packet.Slice(12));
+            Encoding.Latin1.GetBytes(Payload).AsSpan().CopyTo(packet.Slice(12));
 
             return array;
         }

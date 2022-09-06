@@ -1,4 +1,6 @@
-﻿using Microsoft.UI.Xaml;
+﻿using Arconia.Core.Rcon;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Data;
@@ -26,6 +28,8 @@ namespace Arconia
     /// </summary>
     public partial class App : Application
     {
+        public static IServiceProvider Services { get; private set; }
+
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -33,6 +37,11 @@ namespace Arconia
         public App()
         {
             this.InitializeComponent();
+
+            var services = new ServiceCollection();
+            services.AddSingleton<IRconProvider, WinRTRconProvider>();
+
+            Services = services.BuildServiceProvider();
         }
 
         /// <summary>
