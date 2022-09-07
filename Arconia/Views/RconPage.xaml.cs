@@ -8,6 +8,8 @@ using Microsoft.UI.Xaml.Navigation;
 using Arconia.Core.Rcon;
 using Arconia.Core.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
+using Arconia.Core.Services;
+using Arconia.Services;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -24,15 +26,12 @@ namespace Arconia.Views
         public RconPage()
         {
             this.InitializeComponent();
-            NavigationCacheMode = NavigationCacheMode.Required;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs navArgs)
         {
             RconArgs args = (RconArgs)navArgs.Parameter;
-            vm = new RconViewModel(App.Services.GetService<IRconProvider>(), args.hostname, args.port, args.password);
+            vm = new RconViewModel(new NavigationService(this.Frame), new WinRTRconProvider(), args.hostname, args.port, args.password);
         }
     }
-
-    public readonly record struct RconArgs(string hostname, int port, string password);
 }

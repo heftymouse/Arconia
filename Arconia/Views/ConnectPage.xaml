@@ -8,7 +8,7 @@
     mc:Ignorable="d">
 
     <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="12">
-        <TextBlock Text="Connect to a server" Style="{ ThemeResource TitleLargeTextBlockStyle }" HorizontalAlignment="Center" FontWeight="SemiBold" Margin="0 0 0 0"/>
+        <TextBlock Text="Connect to a server" Style="{ThemeResource TitleLargeTextBlockStyle}" HorizontalAlignment="Center" FontWeight="SemiBold" Margin="0 0 0 0"/>
         <Grid ColumnSpacing="8" RowSpacing="8" Width="352">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -19,11 +19,11 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             
-            <TextBox Grid.Row="0"  Grid.Column="0" Text="{x:Bind connectHost, Mode=TwoWay}" PlaceholderText="Server IP"/>
-            <NumberBox Grid.Row="0" Grid.Column="1" Text="{x:Bind connectPort, Mode=TwoWay}" PlaceholderText="Server Port"/>
-            <PasswordBox x:Name ="passwordBox" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Password="{x:Bind connectPassword, Mode=TwoWay}" PlaceholderText="Server Password"/>
+            <TextBox Grid.Row="0"  Grid.Column="0" Text="{x:Bind vm.Hostname, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Hostname or IP"/>
+            <NumberBox Grid.Row="0" Grid.Column="1" Text="{x:Bind vm.Port, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Port"/>
+            <PasswordBox x:Name ="passwordBox" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Password="{x:Bind vm.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Password"/>
         </Grid>
-        <Button x:Name="ConnectButton" HorizontalAlignment="Center" Margin="0 8 0 0" Style="{ StaticResource AccentButtonStyle }" Click="ConnectButton_Click">
+        <Button x:Name="ConnectButton" HorizontalAlignment="Center" Margin="0 8 0 0" Style="{StaticResource AccentButtonStyle}" Command="{x:Bind vm.ConnectCommand}">
             <Button.KeyboardAccelerators>
                 <KeyboardAccelerator Key="Enter"/>
                 <KeyboardAccelerator Key="Enter" ScopeOwner="{x:Bind passwordBox}"/>

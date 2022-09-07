@@ -1,5 +1,10 @@
-﻿using Microsoft.UI.Xaml;
+﻿using Arconia.Core.ViewModels;
+using Arconia.Services;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Navigation;
+using System;
+using System.Diagnostics;
 
 namespace Arconia.Views
 {
@@ -8,20 +13,16 @@ namespace Arconia.Views
     /// </summary>
     public sealed partial class ConnectPage : Page
     {
-        string connectHost = "localhost";
-        int connectPort = 25575;
-        string connectPassword;
+        ConnectViewModel vm;
 
         public ConnectPage()
         {
             this.InitializeComponent();
         }
 
-        private void ConnectButton_Click(object sender, RoutedEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            if (connectHost == null || connectPort == 0 || connectPassword == null) return;
-
-            this.Frame.Navigate(typeof(RconPage), new RconArgs(connectHost, connectPort, connectPassword));
+            vm = new ConnectViewModel(new NavigationService(this.Frame));
         }
     }
 }

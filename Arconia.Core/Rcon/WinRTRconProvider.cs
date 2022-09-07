@@ -57,7 +57,7 @@ namespace Arconia.Core.Rcon
             byte[] data = new byte[length];
             await inStream.ReadAsync(data, 0, length, token ?? CancellationToken.None);
 
-            RconPacket CreatePacket(ref byte[] bytes)
+            RconPacket CreatePacket(byte[] bytes)
             {
                 Span<byte> buffer = new Span<byte>(bytes);
                 return new(
@@ -67,7 +67,7 @@ namespace Arconia.Core.Rcon
                     );
             }
 
-            return CreatePacket(ref data);
+            return CreatePacket(data);
         }
 
         protected virtual void Dispose(bool disposing)

@@ -1,58 +1,74 @@
 ﻿using Arconia.Core.Rcon;
+using Arconia.Core.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace Arconia.Core.ViewModels
 {
     [ObservableObject]
-    public partial class RconViewModel
+    public partial class RconViewModel : IViewModel
     {
         public string HostName;
         public int Port;
-        public ObservableCollection<RconPacket> Responses = new();
+        private string password;
+        public ObservableCollection<RconPacket> Responses { get; } = new();
         [ObservableProperty]
         private string? currentCommand = null;
 
         private IRconProvider provider;
+        private INavigationService navigationService;
         private Random random = new Random();
-        private Task packetLoopTask;
-        private CancellationTokenSource tokenSource = new();
+        private Task? packetLoopTask;
+        private CancellationTokenSource tokenSource;
         private CancellationToken token;
 
-        public RconViewModel(IRconProvider provider, string hostname, int port, string password)
+        public RconViewModel(INavigationService navService, IRconProvider provider, string hostname, int port, string password)
         {
             HostName = hostname;
             Port = port;
+            this.password = password;
             this.provider = provider;
+            navigationService = navService;
+            tokenSource = new();
+        }
 
+        [RelayCommand]
+        public async Task OnLoad()
+        {
             token = tokenSource.Token;
+            await provider.Connect(HostName, Port, password);
+            packetLoopTask = DoPacketLoop();
+        }
 
-            packetLoopTask = Task.Run(async () =>
+        private async Task DoPacketLoop()
+        {
+            try
             {
-                await provider.Connect(hostname, port, password);
                 while (!token.IsCancellationRequested)
                 {
                     RconPacket packet = await provider.GetNextPacketAsync(token);
                     Responses.Add(packet);
                 }
-                token.ThrowIfCancellationRequested();
-            }, token);
+            }
+            catch (TaskCanceledException)
+            {
+
+            }
+            finally
+            {
+                provider.Dispose();
+                tokenSource.Dispose();
+            }
         }
 
         [RelayCommand]
         public async Task OnSend()
         {
-            if (currentCommand == null) return;
+            if (CurrentCommand == null) return;
 
-            await provider.SendPacketAsync(random.Next(), currentCommand);
-            currentCommand = null;
+            await provider.SendPacketAsync(random.Next(), CurrentCommand);
+            CurrentCommand = null;
         }
 
         [RelayCommand]
@@ -60,8 +76,9 @@ namespace Arconia.Core.ViewModels
         {
             tokenSource.Cancel();
             await packetLoopTask;
-            provider.Dispose();
-            tokenSource.Dispose();
+            navigationService.NavigateTo<ConnectViewModel>();
         }
     }
+
+    public readonly record struct RconArgs(string hostname, int port, string password);
 }

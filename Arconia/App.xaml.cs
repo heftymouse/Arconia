@@ -1,5 +1,10 @@
 ﻿using Arconia.Core.Rcon;
+using Arconia.Core.Services;
+using Arconia.Core.ViewModels;
+using Arconia.Services;
+using Arconia.Views;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -28,7 +33,7 @@ namespace Arconia
     /// </summary>
     public partial class App : Application
     {
-        public static IServiceProvider Services { get; private set; }
+        public static Dictionary<Type, Type> Views { get; private set; }
 
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
@@ -38,10 +43,11 @@ namespace Arconia
         {
             this.InitializeComponent();
 
-            var services = new ServiceCollection();
-            services.AddSingleton<IRconProvider, WinRTRconProvider>();
-
-            Services = services.BuildServiceProvider();
+            Views = new Dictionary<Type, Type>()
+            {
+                { typeof(ConnectViewModel), typeof(ConnectPage) },
+                { typeof(RconViewModel), typeof(RconPage) }
+            };
         }
 
         /// <summary>

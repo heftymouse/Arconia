@@ -4,9 +4,17 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Arconia.Views"
     xmlns:rcon="using:Arconia.Core.Rcon"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
+
+    <interactivity:Interaction.Behaviors>
+        <core:EventTriggerBehavior EventName="Loaded">
+            <core:InvokeCommandAction Command="{x:Bind vm.LoadCommand}"/>
+        </core:EventTriggerBehavior>
+    </interactivity:Interaction.Behaviors>
 
     <Grid Padding="12 36 16 16" VerticalAlignment="Stretch">
         <Grid.RowDefinitions>
@@ -32,7 +40,7 @@
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="rcon:RconPacket">
                     <Grid Background="{ThemeResource LayerFillColorDefaultBrush}" CornerRadius="4" Margin="4">
-                        <TextBlock Text="{x:Bind Payload}" FontFamily="Cascadia Code" TextWrapping="Wrap" IsTextSelectionEnabled="True" Padding="8" VerticalAlignment="Center"/>
+                        <TextBlock Text="{x:Bind Payload}" FontFamily="Cascadia Mono" TextWrapping="Wrap" IsTextSelectionEnabled="True" Padding="8" VerticalAlignment="Center"/>
                         <Button HorizontalAlignment="Right" VerticalAlignment="Top" Margin="8">
                             <SymbolIcon Symbol="Copy"/>
                         </Button>
