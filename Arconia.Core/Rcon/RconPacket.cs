@@ -24,7 +24,7 @@ namespace Arconia.Core.Rcon
         {
             Id = id;
             Type = type;
-            Payload = payload;
+            Payload = payload.Trim();
         }
 
         public int Length
